@@ -18,7 +18,7 @@ os_options = sorted(df['os'].unique())
 try:
     X = df[['Company','TypeName','Ram','Cpu brand','Gpu brand','Weight',
             'Touchscreen','Ips','ppi','HDD','SSD','os']]
-    y = df['Price']  
+    y = df['Price']
     y_pred_log = pipe.predict(X)
     y_pred = np.exp(y_pred_log)  # Convert log(price) -> actual price
     model_accuracy = round(r2_score(y, y_pred) * 100, 2)  # in %
