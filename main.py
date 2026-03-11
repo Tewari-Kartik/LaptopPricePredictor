@@ -6,22 +6,19 @@ from sklearn.metrics import r2_score
 
 app = Flask(__name__)
 
-# Load DataFrame and pipeline
 df = pickle.load(open('df.pkl', 'rb'))
 pipe = pickle.load(open('pipe.pkl', 'rb'))
 
-# Get unique values for dropdowns
 companies = sorted(df['Company'].unique())
 types = sorted(df['TypeName'].unique())
 cpu_brands = sorted(df['Cpu brand'].unique())
 gpu_brands = sorted(df['Gpu brand'].unique())
 os_options = sorted(df['os'].unique())
 
-# Calculate R² score for model accuracy (using df as example; ideally use test set)
 try:
     X = df[['Company','TypeName','Ram','Cpu brand','Gpu brand','Weight',
             'Touchscreen','Ips','ppi','HDD','SSD','os']]
-    y = df['Price']  # Your target variable (actual price, not log)
+    y = df['Price']  
     y_pred_log = pipe.predict(X)
     y_pred = np.exp(y_pred_log)  # Convert log(price) -> actual price
     model_accuracy = round(r2_score(y, y_pred) * 100, 2)  # in %
@@ -77,4 +74,4 @@ def predict():
                                model_accuracy=model_accuracy)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)
